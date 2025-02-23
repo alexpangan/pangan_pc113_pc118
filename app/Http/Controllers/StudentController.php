@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
-use App\Models\Employee;
 
 class StudentController extends Controller
 {
@@ -13,5 +12,87 @@ class StudentController extends Controller
         return response()->json(Student::all());
     }
 
-    
+    public function search(Request $request)
+    {
+        $query = $request->get('query');
+        $students = Student::where('name', 'LIKE', "%".$query."%")
+                            ->orWhere('course', 'LIKE', "%".$query."%")
+                            ->orWhere('year_level', 'LIKE', "%".$query."%")
+                            ->orWhere('email', 'LIKE', "%".$query."%")
+                            ->get();
+        return response()->json($students);
+    }
+
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'course' => 'required',
+    //         'year_level' => 'required',
+    //         'email' => 'required',
+    //         'password' => 'required',
+    //         'phone' => 'required',
+    //         'address' => 'required',
+    //     ]);
+    //     $student = new Student();
+    //     $student->name = $request->name;
+    //     $student->course = $request->course;
+    //     $student->year_level = $request->year_level;
+    //     $student->email = $request->email;
+    //     $student->password = $request->password;
+    //     $student->phone = $request->phone;
+    //     $student->address = $request->address;
+    //     $student->save();
+    //     return response()->json($student);
+    // }
+
+    public function create(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'course' => 'required',
+            'year_level' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
+        ]);
+        $student = Student::create($validatedData);
+        return response()->json($student);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $student = Student::find($id);
+        if (is_null($student)) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+
+        $validatedData = $request->validate([
+            'name' => 'string',
+            'course' => 'string',
+            'year_level' => 'string',
+            'email' => 'string',
+            'password' => 'string',
+            'phone' => 'number',
+            'address' => 'string',
+        ]);
+
+        $student->update ($validatedData);
+        return response()->json([
+            'message' => 'Student updated successfully',
+            'student' => $student
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $student = Student::find($id);
+        if (is_null($student)) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+        $student->delete();
+        return response()->json(['message' => 'Student deleted successfully']);
+    }
+
 }
