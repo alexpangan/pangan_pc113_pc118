@@ -23,20 +23,6 @@ class EmployeeController extends Controller
         return response()->json($employees);
     }
 
-    // public function core(Request $request)
-    // {
-    //     $Request->validate([
-    //         'name' => 'required',
-    //         'email' => 'required',
-    //         'phone' => 'required',
-    //         'address' => 'required',
-    //     ]);
-    //     $query = Student::query();
-    //     if {
-    //         $Request->has('name');
-    //     }
-    // }
-
     public function create(Request $request)
     {
         $validatedData = $request->validate([
@@ -79,6 +65,23 @@ class EmployeeController extends Controller
         $employee->delete();
         return response()->json(['message' => 'Employee deleted successfully']);
     }
+
+    // public function login(Request $request)
+    // {
+    //     $employee = Employee::where('email', $request->email)->first();
+    //     if($employee){
+    //         $token = $employee->createToken('token')->plainTextToken;
+    //         return response()->json([
+    //             'message' => 'Login successful',
+    //             'token' => $token,
+    //             'employee' => $employee
+    //         ]);
+    //     }else{
+    //         return response()->json([
+    //             'message' => 'Login failed'
+    //         ]);
+    //     }
+    // }
 
     public function login(Request $request)
     {

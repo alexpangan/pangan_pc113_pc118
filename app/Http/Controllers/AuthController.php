@@ -9,6 +9,11 @@ use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
+    public function index()
+    {
+        return User::all();
+    }
+
     public function login(Request $request)
     {
         $user = User::where('email', $request->email)->first();

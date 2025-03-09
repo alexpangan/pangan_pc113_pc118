@@ -22,30 +22,7 @@ class StudentController extends Controller
                             ->get();
         return response()->json($students);
     }
-
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required',
-    //         'course' => 'required',
-    //         'year_level' => 'required',
-    //         'email' => 'required',
-    //         'password' => 'required',
-    //         'phone' => 'required',
-    //         'address' => 'required',
-    //     ]);
-    //     $student = new Student();
-    //     $student->name = $request->name;
-    //     $student->course = $request->course;
-    //     $student->year_level = $request->year_level;
-    //     $student->email = $request->email;
-    //     $student->password = $request->password;
-    //     $student->phone = $request->phone;
-    //     $student->address = $request->address;
-    //     $student->save();
-    //     return response()->json($student);
-    // }
-
+    
     public function create(Request $request)
     {
         $validatedData = $request->validate([
@@ -94,6 +71,23 @@ class StudentController extends Controller
         $student->delete();
         return response()->json(['message' => 'Student deleted successfully']);
     }
+
+    // public function login(Request $request)
+    // {
+    //     $student = Student::where('email', $request->email)->first();
+    //     if($student){
+    //         $token = $student->createToken('token')->plainTextToken;
+    //         return response()->json([
+    //             'message' => 'Login successful',
+    //             'token' => $token,
+    //             'student' => $student
+    //         ]);
+    //     }else{
+    //         return response()->json([
+    //             'message' => 'Login failed'
+    //         ]);
+    //     }
+    // }
 
     public function login(Request $request)
     {
