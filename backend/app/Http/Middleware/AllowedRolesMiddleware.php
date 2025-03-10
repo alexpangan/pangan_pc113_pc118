@@ -25,11 +25,4 @@ class AllowedRolesMiddleware
         }   
         return $next($request);
     }
-
-    // {
-    //     if (!$request->user() || $request->user()->role !== 'admin') {
-    //         return response('Unauthorized', 403);
-    //     }
-    //     return $next($request);
-    // }
 }
