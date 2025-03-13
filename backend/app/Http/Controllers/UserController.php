@@ -13,7 +13,6 @@ class UserController extends Controller
             'message' => 'User Dashboard',
             'user' => Auth::user(),
         ]);
-        
-         
+           
     }
 }

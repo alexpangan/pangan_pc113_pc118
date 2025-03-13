@@ -7,15 +7,14 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 
-Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login']);
 
     Route ::middleware('auth:sanctum', 'role:0')->group(function(){
         Route::get('/admin', [AuthController::class, 'index']);
 
     });
-Route ::middleware('auth:sanctum', 'role:1')->group(function(){
-    Route::get('/user', [UserController::class, 'index']);
-
+    Route ::middleware('auth:sanctum', 'role:1')->group(function(){
+        Route::get('/user', [UserController::class, 'index']);
     });
 
 

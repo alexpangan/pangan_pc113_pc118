@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Employee;
+use Exception;
 
 use Illuminate\Http\Request;
 
@@ -9,7 +10,11 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        return response()->json(Employee::all());
+        try {
+            return response()->json(Employee::all());
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Error boss: ' . $e->getMessage()], 500);
+        }
     }
 
     public function search(Request $request)
@@ -58,12 +63,16 @@ class EmployeeController extends Controller
 
     public function destroy($id)
     {
-        $employee = Employee::find($id);
-        if (is_null($employee)) {
-            return response()->json(['message' => 'Not found'], 404);
+        try {
+            $employee = Employee::find($id);
+            if (is_null($employee)) {
+                return response()->json(['message' => 'Not found'], 404);
+            }
+            $employee->delete();
+            return response()->json(['message' => 'Employee deleted successfully']);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
-        $employee->delete();
-        return response()->json(['message' => 'Employee deleted successfully']);
     }
 
     // public function login(Request $request)
@@ -83,20 +92,20 @@ class EmployeeController extends Controller
     //     }
     // }
 
-    public function login(Request $request)
-    {
-        $employee = Employee::where('email', $request->email)->first();
-        if($employee){
-            $token = $employee->createToken('token')->plainTextToken;
-            return response()->json([
-                'message' => 'Login successful',
-                'token' => $token,
-                'employee' => $employee
-            ]);
-        }else{
-            return response()->json([
-                'message' => 'Login failed'
-            ]);
-        }
-    }
+    // public function login(Request $request)
+    // {
+    //     $employee = Employee::where('email', $request->email)->first();
+    //     if($employee){
+    //         $token = $employee->createToken('token')->plainTextToken;
+    //         return response()->json([
+    //             'message' => 'Login successful',
+    //             'token' => $token,
+    //             'employee' => $employee
+    //         ]);
+    //     }else{
+    //         return response()->json([
+    //             'message' => 'Login failed'
+    //         ]);
+    //     }
+    // }
 }
