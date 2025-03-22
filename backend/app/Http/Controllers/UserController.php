@@ -9,6 +9,7 @@ class UserController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
         return response()->json([
             'message' => 'User Dashboard',
             'user' => Auth::user(),

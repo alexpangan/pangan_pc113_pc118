@@ -13,7 +13,9 @@ class EmployeeController extends Controller
         try {
             return response()->json(Employee::all());
         } catch (Exception $e) {
-            return response()->json(['message' => 'Error boss: ' . $e->getMessage()], 500);
+            return response()->json([
+                'message' => 'Error occured: ' . $e->getMessage()
+            ], 500);
         }
     }
 
@@ -66,12 +68,18 @@ class EmployeeController extends Controller
         try {
             $employee = Employee::find($id);
             if (is_null($employee)) {
-                return response()->json(['message' => 'Not found'], 404);
+                return response()->json([
+                    'message' => 'Not found'
+                ]);
             }
             $employee->delete();
-            return response()->json(['message' => 'Employee deleted successfully']);
+            return response()->json([
+                'message' => 'Employee deleted successfully'
+            ]);
         } catch (Exception $e) {
-            return response()->json(['message' => 'An error occurred: ' . $e->getMessage()], 500);
+            return response()->json([
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], 500);
         }
     }
 

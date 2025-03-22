@@ -31,29 +31,4 @@ class AuthController extends Controller
         }
     }
 
-    // public function login(Request $request)
-    // {
-    //     try {
-    //         if (Auth::attempt([
-    //             'email' => $request->email,
-    //             'password' => $request->password,
-    //         ])) {
-    //             $user = Auth::user();
-    //             $token = $user->createToken('auth_token')->plainTextToken;
-    //             return response()->json([
-    //                 'message' => 'Login successful',
-    //                 'token' => $token,
-    //             ], 200);
-    //         }
-
-    //         return response()->json([
-    //             'message' => 'Invalid email or password',
-    //         ], 401);
-    //     } catch (Exception $e) {
-    //         return response()->json([
-    //             'error' => 'Login failed',
-    //             'message' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
 }

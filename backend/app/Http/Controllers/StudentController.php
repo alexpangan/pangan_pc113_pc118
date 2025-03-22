@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
+use Exception;
 
 class StudentController extends Controller
 {
     public function index()
     {
-        return response()->json(Student::all());
+        try{
+            return response()->json(Student::all());
+        }catch(Exception $e){
+            return response()->json([
+                'message' => 'Error Occured: ' . $e->getMessage()
+            ]);
+        }
     }
 
     public function search(Request $request)
