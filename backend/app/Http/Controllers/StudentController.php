@@ -11,10 +11,11 @@ class StudentController extends Controller
     public function index()
     {
         try{
-            return response()->json(Student::all());
+            $students = Student::all();
+            return response()->json($students);
         }catch(Exception $e){
             return response()->json([
-                'message' => 'Error Occured: ' . $e->getMessage()
+                'message' => 'Error : ' . $e->getMessage()
             ]);
         }
     }
@@ -22,7 +23,8 @@ class StudentController extends Controller
     public function search(Request $request)
     {
         $query = $request->get('query');
-        $students = Student::where('name', 'LIKE', "%".$query."%")
+        $students = Student::where('id', 'LIKE', "%".$query."%")
+                            ->orWhere('name', 'LIKE', "%".$query."%")
                             ->orWhere('course', 'LIKE', "%".$query."%")
                             ->orWhere('year_level', 'LIKE', "%".$query."%")
                             ->orWhere('email', 'LIKE', "%".$query."%")

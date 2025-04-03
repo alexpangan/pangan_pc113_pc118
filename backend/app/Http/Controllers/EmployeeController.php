@@ -24,6 +24,7 @@ class EmployeeController extends Controller
         $query = $request->get('query');
         $employees = Employee::where('name', 'LIKE', "%".$query."%")
                             ->orWhere('email', 'LIKE', "%".$query."%")
+                            ->orWhere('password', 'LIKE', "%".$query."%")   
                             ->orWhere('phone', 'LIKE', "%".$query."%")
                             ->orWhere('address', 'LIKE', "%".$query."%")
                             ->get();

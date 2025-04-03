@@ -18,7 +18,7 @@ use App\Http\Controllers\UserController;
     });
 
     Route::get('/students',[StudentController::class,'index']);
-    Route::get('/students/search',[StudentController::class,'search']);
+    Route::get('/students/search/{id}',[StudentController::class,'search']);
     Route::post('/students/create',[StudentController::class,'create']);
     Route::put('/students/update/{id}',[StudentController::class,'update']);
     Route::delete('/students/delete/{id}',[StudentController::class,'destroy']);

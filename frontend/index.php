@@ -10,38 +10,40 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #121212;
+            background-color: #1E3A8A; 
         }
         .form {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
             padding: 2em;
-            background-color: #171717;
-            border-radius: 25px;
-            transition: .4s ease-in-out;
+            background-color: #3B82F6; 
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: 0.3s ease-in-out;
             text-align: center;
+            width: 300px;
         }
         .form:hover {
             transform: scale(1.05);
-            border: 1px solid black;
         }
         #heading {
             color: white;
             font-size: 1.5em;
+            font-weight: bold;
         }
         .field {
             display: flex;
             align-items: center;
             gap: 0.5em;
-            border-radius: 25px;
-            padding: 0.6em;
-            background-color: #171717;
-            box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+            border-radius: 10px;
+            padding: 0.7em;
+            background-color: #1E40AF; /* Dark blue for contrast */
+            box-shadow: inset 2px 5px 10px rgba(5, 5, 5, 0.5);
         }
         .input-icon {
-            height: 1.3em;
-            width: 1.3em;
+            height: 1.5em;
+            width: 1.5em;
             fill: white;
         }
         .input-field {
@@ -49,31 +51,26 @@
             border: none;
             outline: none;
             width: 100%;
-            color: #d3d3d3;
+            color: white;
+            font-size: 1em;
         }
         .btn {
-            display: flex;
-            justify-content: center;
-            gap: 1em;
-            margin-top: 2.5em;
+            margin-top: 1.5em;
         }
-        .button1, .button2, .button3 {
-            padding: 0.5em 1.5em;
+        .button1 {
+            padding: 0.6em 1.8em;
             border-radius: 5px;
             border: none;
-            transition: .4s ease-in-out;
-            background-color: #252525;
+            transition: 0.3s ease-in-out;
+            background-color: #2563EB;
             color: white;
             cursor: pointer;
+            font-size: 1em;
+            text-decoration: none;
+            display: inline-block;
         }
-        .button1:hover, .button2:hover {
-            background-color: black;
-        }
-        .button3 {
-            margin-top: 1em;
-        }
-        .button3:hover {
-            background-color: red;
+        .button1:hover {
+            background-color: #1E40AF;
         }
     </style>
 </head>
@@ -93,7 +90,7 @@
             <input placeholder="Password" class="input-field" type="password">
         </div>
         <div class="btn">
-          <a href="dashboard.php" class="button1">Login</a>
+            <a href="dashboard.php" class="button1">Login</a>
         </div>
     </form>
 </body>
