@@ -31,6 +31,12 @@ use App\Http\Controllers\UserController;
     Route::delete('/employees/delete/{id}',[EmployeeController::class,'destroy']);
     Route::post('/employees/login',[EmployeeController::class,'login']);
 
+    Route::get('/users', [AuthController::class, 'index']); // Get all users
+    Route::post('/users', [AuthController::class, 'store']); // Create a new user
+    Route::get('/users/{id}', [AuthController::class, 'show']); // Get a single user
+    Route::put('/users/{id}', [AuthController::class, 'update']); // Update a user
+    Route::delete('/users/{id}', [AuthController::class, 'destroy']); // Delete a user
+ 
 
 
 // Route::get('/user', function (Request $request) {

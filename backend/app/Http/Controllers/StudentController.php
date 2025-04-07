@@ -16,7 +16,7 @@ class StudentController extends Controller
         }catch(Exception $e){
             return response()->json([
                 'message' => 'Error : ' . $e->getMessage()
-            ]);
+            ]);  
         }
     }
 

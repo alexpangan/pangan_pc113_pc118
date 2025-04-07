@@ -10,6 +10,7 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
         }
         .sidebar {
             height: 100vh;
@@ -28,26 +29,30 @@
             text-decoration: none;
             color: white;
             display: block;
+            transition: background-color 0.3s ease;
         }
         .sidebar a:hover {
-            background-color: #87CEEB;
+            background-color: #2563EB;
         }
         .content {
             margin-left: 200px;
             padding: 20px;
         }
+        .content h1 {
+            color: #333;
+        }
     </style>
 </head>
 <body>
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="Sidebar Navigation">
         <a href="dashboard.php">Dashboard</a>
-        <a href="user.php">User</a>
+        <a href="user/index.php">User</a>
         <a href="student/index.php">Student</a>
         <a href="employee/index.php">Employee</a>
-        <a href="#">Logout</a>
-    </div>
-    <div class="content">
-        <h1>Welcome Admin</h1>
-    </div>
+        <a href="index.php">Logout</a>
+    </nav>
+    <main class="content">
+        <h1>Welcome, Admin</h1>
+    </main>
 </body>
 </html>

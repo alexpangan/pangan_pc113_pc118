@@ -49,8 +49,8 @@
     <div class="content">
         <h1>Students List</h1>
         <div class="addstudent">
-            <H3>Add new</H3>
-        </div>
+        <h3 style="cursor: pointer; color: #2563eb;" id="openAddModal">+ Add New</h3>
+    </div>
         <table id="studentsTable" class="table">
             <thead>
                 <tr>
@@ -92,6 +92,28 @@
         </form>
     </div>
 
+    <!-- Add Modal -->
+    <div id="addModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #f0f8ff; padding: 40px; border: 1px solid #ccc; z-index: 1000;">
+        <h2>Add New Student</h2>
+        <form id="addForm">
+            <label for="addName">Name:</label>
+            <input type="text" id="addName" required><br><br>
+            <label for="addCourse">Course:</label>
+            <input type="text" id="addCourse" required><br><br>
+            <label for="addYearLevel">Year Level:</label>
+            <input type="text" id="addYearLevel" required><br><br>
+            <label for="addEmail">Email:</label>
+            <input type="email" id="addEmail" required><br><br>
+            <label for="addPhone">Phone:</label>
+            <input type="text" id="addPhone" required><br><br>
+            <label for="addAddress">Address:</label>
+            <textarea id="addAddress" required></textarea><br><br>
+            <button type="button" id="saveAdd">Add</button>
+            <button type="button" id="closeAddModal">Cancel</button>
+        </form>
+    </div>
+
+
     <script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -120,7 +142,8 @@
                                             stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon 
                                             icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                             <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
-                                            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg> Edit
+                                            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" />
+                                            </svg> Edit
                                         </button>
 
                                         <button class="deleteBtn" data-id="${student.id}" 
@@ -129,7 +152,8 @@
                                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
                                             class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" 
                                             d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" />
-                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg> Delete
+                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                                            Delete
                                         </button>
                                     </div>
                                 </td>
@@ -220,6 +244,50 @@
                     }
                 }
             });
+            // Open Add Modal
+            document.querySelector('#openAddModal').addEventListener('click', function () {
+                document.querySelector('#addModal').style.display = 'block';
+            });
+
+            // Close Add Modal
+            document.querySelector('#closeAddModal').addEventListener('click', function () {
+                document.querySelector('#addModal').style.display = 'none';
+            });
+
+            // Save New Student
+            document.querySelector('#saveAdd').addEventListener('click', function () {
+                const newStudent = {
+                    name: document.querySelector('#addName').value,
+                    course: document.querySelector('#addCourse').value,
+                    year_level: document.querySelector('#addYearLevel').value,
+                    email: document.querySelector('#addEmail').value,
+                    phone: document.querySelector('#addPhone').value,
+                    address: document.querySelector('#addAddress').value,
+                };
+
+                fetch('http://localhost:8000/api/students/create', { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newStudent),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to add student');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Student added successfully!');
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Error adding student:', error);
+                    alert('Failed to add student.');
+                });
+            });
+
         });
     </script>   
 </body>
