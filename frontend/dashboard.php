@@ -1,3 +1,4 @@
+<!-- filepath: c:\wamp64\www\attendance\frontend\dashboard.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,45 +13,20 @@
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
         }
-        .sidebar {
-            height: 100vh;
-            width: 200px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: #3B82F6;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            padding-top: 20px;
-        }
-        .sidebar a {
-            padding: 15px;
-            text-decoration: none;
-            color: white;
-            display: block;
-            transition: background-color 0.3s ease;
-        }
-        .sidebar a:hover {
-            background-color: #2563EB;
-        }
+
         .content {
             margin-left: 200px;
-            padding: 20px;
+            padding: 80px 20px 20px;
         }
+
         .content h1 {
             color: #333;
         }
     </style>
 </head>
 <body>
-    <nav class="sidebar" aria-label="Sidebar Navigation">
-        <a href="dashboard.php">Dashboard</a>
-        <a href="user/index.php">User</a>
-        <a href="student/index.php">Student</a>
-        <a href="employee/index.php">Employee</a>
-        <a href="index.php">Logout</a>
-    </nav>
+    <?php include 'includes/navbar.php'; ?> 
+
     <main class="content">
         <h1>Welcome, Admin</h1>
     </main>

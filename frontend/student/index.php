@@ -3,292 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
     <title>Student Dashboard</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        .sidebar {
-            height: 100vh;
-            width: 200px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: #3B82F6;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            padding-top: 20px;
-        }
-        .sidebar a {
-            padding: 15px;
-            text-decoration: none;
-            color: white;
-            display: block;
-        }
-        .sidebar a:hover {
-            background-color: #87CEEB;
-        }
-        .content {
-            margin-left: 200px;
-            padding: 20px;
-        }
+        /* Your existing styles here (unchanged for brevity) */
+        body { margin: 0; font-family: Arial, sans-serif; }
+        .content { margin-left: 200px; padding: 80px 20px 20px; }
+        .content h1 { color: #333; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 90%; overflow: auto; background-color: rgba(0, 0, 0, 0.4); padding-top: 60px; }
+        .modal-content { background-color: #fff; margin: auto; padding: 20px; border: 1px solid #888; width: 40%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+        .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-btn:hover, .close-btn:focus { color: black; text-decoration: none; cursor: pointer; }
+        .modal-content form { display: flex; flex-direction: column; gap: 10px; }
+        .modal-content form label { font-weight: bold; }
+        .modal-content form input { padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; }
+        .modal-content form .button1 { background-color: #2563EB; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .modal-content form .button1:hover { background-color: #1E40AF; }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <a href="dashboard.php">Dashboard</a>
-        <a href="user.php">User</a>
-        <a href="index.php">Student</a>
-        <a href="employee.php">Employee</a>
-        <a href="#">Logout</a>
-    </div>
+    <?php include '../includes/navbar.php'; ?>
+
     <div class="content">
         <h1>Students List</h1>
-        <div class="addstudent">
-        <h3 style="cursor: pointer; color: #2563eb;" id="openAddModal">+ Add New</h3>
-    </div>
-        <table id="studentsTable" class="table">
+        <button id="addStudentBtn" style="background-color: #10B981; color: white; padding: 0.6em 1.4em; font-size: 1em; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: background-color 0.3s ease, transform 0.2s;">Add Student</button>
+        <table id="studentsTable" class="display">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Name</th>
+                    <th>Email</th>
                     <th>Course</th>
                     <th>Year Level</th>
-                    <th>Email</th>
                     <th>Phone</th>
                     <th>Address</th>
+                    <th>Profile Picture</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
-    
-    <!-- Edit Modal -->
-    <div id="editModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: skyblue; padding: 50px; border: 1px solid #ccc; z-index: 1000;">
-        <h2>Edit Student</h2>
-        <form id="editForm">
-            <input type="hidden" id="editStudentId">
-            <label for="editName">Name:</label>
-            <input type="text" id="editName" required><br><br>
-            <label for="editCourse">Course:</label>
-            <input type="text" id="editCourse" required><br><br>
-            <label for="editYearLevel">Year Level:</label>
-            <input type="text" id="editYearLevel" required><br><br>
-            <label for="editEmail">Email:</label>
-            <input type="email" id="editEmail" required><br><br>
-            <label for="editPhone">Phone:</label>
-            <input type="text" id="editPhone" required><br><br>
-            <label for="editAddress">Address:</label>
-            <textarea id="editAddress" required></textarea><br><br>
-            <button type="button" id="saveEdit">Save</button>
-            <button type="button" id="closeModal">Cancel</button>
-        </form>
-    </div>
 
-    <!-- Add Modal -->
-    <div id="addModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #f0f8ff; padding: 40px; border: 1px solid #ccc; z-index: 1000;">
-        <h2>Add New Student</h2>
-        <form id="addForm">
-            <label for="addName">Name:</label>
-            <input type="text" id="addName" required><br><br>
-            <label for="addCourse">Course:</label>
-            <input type="text" id="addCourse" required><br><br>
-            <label for="addYearLevel">Year Level:</label>
-            <input type="text" id="addYearLevel" required><br><br>
-            <label for="addEmail">Email:</label>
-            <input type="email" id="addEmail" required><br><br>
-            <label for="addPhone">Phone:</label>
-            <input type="text" id="addPhone" required><br><br>
-            <label for="addAddress">Address:</label>
-            <textarea id="addAddress" required></textarea><br><br>
-            <button type="button" id="saveAdd">Add</button>
-            <button type="button" id="closeAddModal">Cancel</button>
-        </form>
-    </div>
+    <!-- Add/Edit Student Modal -->
+    <div id="addStudentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeAddModal">&times;</span>
+            <h2 id="modalTitle">Add Student</h2>
+            <form id="addStudentForm">
+                <label for="addName">Name:</label>
+                <input type="text" id="addName" name="name" required>
 
+                <label for="addCourse">Course:</label>
+                <input type="text" id="addCourse" name="course" required>
+
+                <label for="addYearLevel">Year Level:</label>
+                <input type="text" id="addYearLevel" name="year_level" required>
+
+                <label for="addEmail">Email:</label>
+                <input type="email" id="addEmail" name="email" required>
+
+                <label for="addPassword">Password:</label>
+                <input type="password" id="addPassword" name="password" required>
+
+                <label for="addPhone">Phone:</label>
+                <input type="text" id="addPhone" name="phone" required>
+
+                <label for="addAddress">Address:</label>
+                <input type="text" id="addAddress" name="address" required>
+
+                <label for="addProfilePicture">Profile Picture:</label>
+                <input type="file" id="addProfilePicture" name="profile_picture" accept="image/*">
+
+                <img id="profilePreview" style="max-width: 100px; display: none; border-radius: 8px; margin-top: 10px;" />
+
+                <button type="submit" class="button1">Save</button>
+            </form>
+        </div>
+    </div>
 
     <script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Fetch data from the students API
-            fetch('http://localhost:8000/api/students') 
-                .then(response => response.json())
-                .then(data => {
-                    let tableBody = '';
-                    data.forEach((student, index) => {
-                        tableBody += `
-                            <tr>
-                                <td>${index + 1}</td>
-                                <td>${student.name}</td>
-                                <td>${student.course}</td>
-                                <td>${student.year_level}</td>
-                                <td>${student.email}</td>
-                                <td>${student.phone}</td>
-                                <td>${student.address}</td>
-                                <td style="text-align: center;">
-                                    <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-                                        <button class="editBtn" data-id="${student.id}" data-name="${student.name}" 
-                                            data-course="${student.course}" data-year_level="${student.year_level}" 
-                                            data-email="${student.email}" data-phone="${student.phone}" data-address="${student.address}" 
-                                            style="border: none; background: none; cursor: pointer; color: blue;">
-                                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none" 
-                                            stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon 
-                                            icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                            <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
-                                            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" />
-                                            </svg> Edit
-                                        </button>
+        $(document).ready(function () {
+            let editingStudentId = null;
+            let table = null;
 
-                                        <button class="deleteBtn" data-id="${student.id}" 
-                                            style="border: none; background: none; cursor: pointer; color: red;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
-                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
-                                            class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" 
-                                            d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" />
-                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
-                                            Delete
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        `;
-                    });
-                    document.querySelector('#studentsTable tbody').innerHTML = tableBody;
-                    $('#studentsTable').DataTable(); // Initialize DataTables
-                })
-                .catch(error => {
-                    console.error('Error fetching students:', error);
-                });
+            function fetchStudents() {
+                $.ajax({
+                    url: 'http://localhost:8000/api/students',
+                    method: 'GET',
+                    success: function (data) {
+                        let tableBody = '';
+                        data.forEach((student, index) => {
+                            tableBody += `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${student.name}</td>
+                                    <td>${student.email}</td>
+                                    <td>${student.course}</td>
+                                    <td>${student.year_level}</td>
+                                    <td>${student.phone}</td>
+                                    <td>${student.address}</td>
+                                    <td><img src="${student.profile_picture}" style="width: 50px; height: 50px; border-radius: 50%;"></td>
+                                    <td>
+                                        <button class="edit-btn" data-id="${student.id}" style="background-color: #3B82F6; color: white; padding: 0.5em 1em; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Edit</button>
+                                        <button class="delete-btn" data-id="${student.id}" style="background-color: #EF4444; color: white; padding: 0.5em 1em; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Delete</button>
+                                    </td>
+                                </tr>`;
+                        });
 
-            // Open Edit Modal
-            document.addEventListener('click', function (event) {
-                if (event.target.classList.contains('editBtn')) {
-                    const studentId = event.target.getAttribute('data-id');
-                    document.querySelector('#editStudentId').value = studentId;
-                    document.querySelector('#editName').value = event.target.getAttribute('data-name');
-                    document.querySelector('#editCourse').value = event.target.getAttribute('data-course');
-                    document.querySelector('#editYearLevel').value = event.target.getAttribute('data-year_level');
-                    document.querySelector('#editEmail').value = event.target.getAttribute('data-email');
-                    document.querySelector('#editPhone').value = event.target.getAttribute('data-phone');
-                    document.querySelector('#editAddress').value = event.target.getAttribute('data-address');
-                    document.querySelector('#editModal').style.display = 'block';
-                }
-            });
-            // Close Edit Modal
-            document.querySelector('#closeModal').addEventListener('click', function () {
-                document.querySelector('#editModal').style.display = 'none';
-            });
-            // Save Edited Data
-            document.querySelector('#saveEdit').addEventListener('click', function () {
-                const studentId = document.querySelector('#editStudentId').value;
-                const updatedData = {
-                    name: document.querySelector('#editName').value,
-                    course: document.querySelector('#editCourse').value,
-                    year_level: document.querySelector('#editYearLevel').value,
-                    email: document.querySelector('#editEmail').value,
-                    phone: document.querySelector('#editPhone').value,
-                    address: document.querySelector('#editAddress').value,
-                };
-
-                fetch(`http://localhost:8000/api/students/update/${studentId}`, { 
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(updatedData),
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Failed to update student');
+                        if (table) {
+                            table.clear().destroy();
                         }
-                        return response.json();
-                    })
-                    .then(data => {
-                        alert('Student updated successfully!');
-                        location.reload(); // Reload the page to reflect changes
-                    })
-                    .catch(error => {
-                        console.error('Error updating student:', error);
-                        alert('Failed to update student.');
-                    });
-            });
-            // Delete Student
-            document.addEventListener('click', function (event) {
-                if (event.target.classList.contains('deleteBtn')) {
-                    const studentId = event.target.getAttribute('data-id');
-                    if (confirm('Are you sure you want to delete this student?')) {
-                        fetch(`http://localhost:8000/api/students/delete/${studentId}`, { // Replace with your API endpoint
-                            method: 'DELETE',
-                        })
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error('Failed to delete student');
-                                }
-                                return response.json();
-                            })
-                            .then(data => {
-                                alert('Student deleted successfully!');
-                                location.reload(); // Reload the page to reflect changes
-                            })
-                            .catch(error => {
-                                console.error('Error deleting student:', error);
-                                alert('Failed to delete student.');
-                            });
-                    }
-                }
-            });
-            // Open Add Modal
-            document.querySelector('#openAddModal').addEventListener('click', function () {
-                document.querySelector('#addModal').style.display = 'block';
-            });
 
-            // Close Add Modal
-            document.querySelector('#closeAddModal').addEventListener('click', function () {
-                document.querySelector('#addModal').style.display = 'none';
-            });
-
-            // Save New Student
-            document.querySelector('#saveAdd').addEventListener('click', function () {
-                const newStudent = {
-                    name: document.querySelector('#addName').value,
-                    course: document.querySelector('#addCourse').value,
-                    year_level: document.querySelector('#addYearLevel').value,
-                    email: document.querySelector('#addEmail').value,
-                    phone: document.querySelector('#addPhone').value,
-                    address: document.querySelector('#addAddress').value,
-                };
-
-                fetch('http://localhost:8000/api/students/create', { 
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
+                        $('#studentsTable tbody').html(tableBody);
+                        table = $('#studentsTable').DataTable();
                     },
-                    body: JSON.stringify(newStudent),
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to add student');
+                    error: function (error) {
+                        console.error('Error fetching students:', error);
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    alert('Student added successfully!');
-                    location.reload();
-                })
-                .catch(error => {
-                    console.error('Error adding student:', error);
-                    alert('Failed to add student.');
+                });
+            }
+
+            fetchStudents();
+
+            $('#addStudentBtn').on('click', function () {
+                editingStudentId = null;
+                $('#modalTitle').text('Add Student');
+                $('#addStudentForm')[0].reset();
+                $('#profilePreview').hide().attr('src', '');
+                $('#addStudentModal').show();
+            });
+
+            $('#closeAddModal').on('click', function () {
+                $('#addStudentModal').hide();
+                $('#profilePreview').hide().attr('src', '');
+            });
+
+            $('#addStudentForm').on('submit', function (e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+                if (editingStudentId) {
+                    formData.append('_method', 'PUT'); // For Laravel-style APIs
+                }
+
+                const url = editingStudentId
+                    ? `http://localhost:8000/api/students/update/${editingStudentId}`
+                    : 'http://localhost:8000/api/students/create';
+
+                $.ajax({
+                    url: url,
+                    method: 'POST', // Always POST if using FormData and _method override
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function () {
+                        alert(editingStudentId ? 'Student updated successfully!' : 'Student added successfully!');
+                        $('#addStudentModal').hide();
+                        fetchStudents();
+                    },
+                    error: function (error) {
+                        console.error('Error saving student:', error);
+                        alert('Failed to save student.');
+                    }
                 });
             });
 
+            $('#addProfilePicture').on('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#profilePreview').attr('src', e.target.result).show();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    $('#profilePreview').hide().attr('src', '');
+                }
+            });
+
+            $(document).on('click', '.edit-btn', function () {
+                editingStudentId = $(this).data('id');
+
+                $.ajax({
+                    url: `http://localhost:8000/api/students/${editingStudentId}`,
+                    method: 'GET',
+                    success: function (student) {
+                        $('#modalTitle').text('Edit Student');
+                        $('#addName').val(student.name);
+                        $('#addCourse').val(student.course);
+                        $('#addYearLevel').val(student.year_level);
+                        $('#addEmail').val(student.email);
+                        $('#addPassword').val(student.password);
+                        $('#addPhone').val(student.phone);
+                        $('#addAddress').val(student.address);
+                        $('#profilePreview').hide().attr('src', '');
+                        $('#addStudentModal').show();
+                    },
+                    error: function (error) {
+                        console.error('Error fetching student details:', error);
+                    }
+                });
+            });
+
+            $(document).on('click', '.delete-btn', function () {
+                const studentId = $(this).data('id');
+                if (confirm('Are you sure you want to delete this student?')) {
+                    $.ajax({
+                        url: `http://localhost:8000/api/students/delete/${studentId}`,
+                        method: 'DELETE',
+                        success: function () {
+                            alert('Student deleted successfully!');
+                            fetchStudents();
+                        },
+                        error: function (error) {
+                            console.error('Error deleting student:', error);
+                            alert('Failed to delete student.');
+                        }
+                    });
+                }
+            });
         });
-    </script>   
+    </script>
 </body>
 </html>

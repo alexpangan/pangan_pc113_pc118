@@ -5,17 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Student extends Model
+class Guardian extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
-        'course',
-        'year_level',
+        'student_id',
+        'full_name',
         'email',
-        'password',
         'phone',
         'address',
-        'profile_picture',
+        'photo',
     ];
+
+    // protected $hidden = [
+    //     'password',
+    //     'confirm_password'
+    // ];
 }

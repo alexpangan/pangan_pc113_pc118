@@ -6,9 +6,20 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Exception;
 
 class AuthController extends Controller
 {
+    public function auth()
+    {
+        $user = Auth::user();
+        return response()->json([
+            'message' => 'User Dashboard',
+            'user' => Auth::user(),
+        ]);
+           
+    }
+
     // Get all users
     public function index()
     {
@@ -94,4 +105,29 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'User deleted successfully']);
     }
+
+    public function login(Request $request)
+    {
+        // Validate the request
+        $credentials = $request->validate([
+            'email' => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+        // Attempt to authenticate the user
+        if (!Auth::attempt($credentials)) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+
+        // Generate a token for the authenticated user
+        $user = Auth::user();
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Login successful',
+            'user' => $user,
+            'token' => $token,
+        ]);
+    }
+    
 }

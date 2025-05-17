@@ -36,16 +36,29 @@ class StudentController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required',
-            'course' => 'required',
+            'course' => 'required',  
             'year_level' => 'required',
-            'email' => 'required',
-            'password' => 'required',
+            'email' => 'required|email|unique:students,email',
+            'password' => 'required|min:6',
             'phone' => 'required',
             'address' => 'required',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        // Handle profile picture upload
+        if ($request->hasFile('profile_picture')) {
+            $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $validatedData['profile_picture'] = $imagePath;
+        }
+
+        // Hash password
+        $validatedData['password'] = bcrypt($validatedData['password']);
+
         $student = Student::create($validatedData);
+
         return response()->json($student);
     }
+
 
     public function update(Request $request, $id)
     {
@@ -55,16 +68,29 @@ class StudentController extends Controller
         }
 
         $validatedData = $request->validate([
-            'name' => 'string',
-            'course' => 'string',
-            'year_level' => 'string',
-            'email' => 'string',
-            'password' => 'string',
-            'phone' => 'number',
-            'address' => 'string',
+            'name' => 'sometimes|string',
+            'course' => 'sometimes|string',
+            'year_level' => 'sometimes|string',
+            'email' => 'sometimes|email|unique:students,email,' . $id,
+            'password' => 'sometimes|string|min:6',
+            'phone' => 'sometimes|string', // better than numeric
+            'address' => 'sometimes|string',
+            'profile_picture' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $student->update ($validatedData);
+        // Handle profile picture upload
+        if ($request->hasFile('profile_picture')) {
+            $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $validatedData['profile_picture'] = $imagePath;
+        }
+
+        // Hash password if provided
+        if (isset($validatedData['password'])) {
+            $validatedData['password'] = bcrypt($validatedData['password']);
+        }
+
+        $student->update($validatedData);
+
         return response()->json([
             'message' => 'Student updated successfully',
             'student' => $student
@@ -97,5 +123,5 @@ class StudentController extends Controller
             ]);
         }
     }
-
+     
 }
