@@ -13,8 +13,9 @@ class Guardian extends Model
         'full_name',
         'email',
         'phone',
+        'password',
         'address',
-        'photo',
+        'profile',
     ];
 
     // protected $hidden = [

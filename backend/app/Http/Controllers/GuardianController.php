@@ -19,14 +19,17 @@ class GuardianController extends Controller
         $validatedData = $request->validate([
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|unique:guardians,email',
+            'password' => 'required|string|min:8',
             'phone' => 'required|string|max:15',
             'address' => 'required|string|max:255',
             'student_id' => 'nullable|string|max:50',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'profile' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        if ($request->hasFile('photo')) {
-            $validatedData['photo'] = $request->file('photo')->store('photos', 'public');
+        // Handle profile picture upload
+        if ($request->hasFile('profile')) {
+            $imagePath = $request->file('profile')->store('photos', 'public');
+            $validatedData['profile'] = $imagePath;
         }
 
         Guardian::create($validatedData);

@@ -1,13 +1,14 @@
 <div class="store">
     <div class="container">
         <h2>Announcement</h2>
-        <div class="mb-3 d-flex justify-content-between align-items-center">
+        <div class="mb-3 d-flex justify-content-between align-items-centermb-3 d-flex justify-content-between align-items-center">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">Add Announcement</button>
             <input type="text" id="searchInput" class="form-control w-auto" placeholder="Search..." style="max-width: 250px;">
         </div>
         <table id="activitiesTable" class="table table-bordered table-striped bg-white">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Activity Title</th>
                     <th>Who</th>
                     <th>What</th>
@@ -58,6 +59,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
+        <p><strong>Activity ID:</strong> <span id="viewId"></span></p>
         <p><strong>Title:</strong> <span id="viewTitle"></span></p>
         <p><strong>Who:</strong> <span id="viewWho"></span></p>
         <p><strong>What:</strong> <span id="viewWhat"></span></p>
@@ -114,6 +116,7 @@ function loadAnnouncements() {
             announcements.forEach(activity => {
                 const row = `
                     <tr>
+                        <td>${activity.id}</td>
                         <td>${activity.title ?? 'N/A'}</td>
                         <td>${activity.who ?? 'N/A'}</td>
                         <td>${activity.what ?? 'N/A'}</td>

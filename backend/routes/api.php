@@ -6,11 +6,11 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\SchoolActivityController;
 use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\Auth\RegisterController;
 
     Route::post('/login', [AuthController::class, 'login']);
 
@@ -68,4 +68,5 @@ use App\Http\Controllers\FileUploadController;
     Route::put('/guardians/{id}', [GuardianController::class, 'update']);
     Route::delete('/guardians/{id}', [GuardianController::class, 'destroy']);
 
-  
+    // Route::get('/signup', [RegisterController::class, 'showForm'])->name('signup');
+    // Route::post('/signup', [RegisterController::class, 'register'])->name('signup.submit');

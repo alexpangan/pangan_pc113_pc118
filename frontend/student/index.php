@@ -6,6 +6,7 @@
     <title>Student Dashboard</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         /* Your existing styles here (unchanged for brevity) */
         body { margin: 0; font-family: Arial, sans-serif; }
@@ -84,6 +85,7 @@
     </div>
 
     <script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function () {
             let editingStudentId = null;
@@ -105,7 +107,7 @@
                                     <td>${student.year_level}</td>
                                     <td>${student.phone}</td>
                                     <td>${student.address}</td>
-                                    <td><img src="${student.profile_picture}" style="width: 50px; height: 50px; border-radius: 50%;"></td>
+                                    <td><img src="http://127.0.0.1:8000/storage/${student.profile_picture}" style="width: 50px; height: 50px; border-radius: 50%;"></td>
                                     <td>
                                         <button class="edit-btn" data-id="${student.id}" style="background-color: #3B82F6; color: white; padding: 0.5em 1em; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Edit</button>
                                         <button class="delete-btn" data-id="${student.id}" style="background-color: #EF4444; color: white; padding: 0.5em 1em; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Delete</button>
@@ -121,7 +123,7 @@
                         table = $('#studentsTable').DataTable();
                     },
                     error: function (error) {
-                        console.error('Error fetching students:', error);
+                        Swal.fire('Error', 'Error fetching students.', 'error');
                     }
                 });
             }
@@ -160,13 +162,12 @@
                     processData: false,
                     contentType: false,
                     success: function () {
-                        alert(editingStudentId ? 'Student updated successfully!' : 'Student added successfully!');
+                        Swal.fire('Success', editingStudentId ? 'Student updated successfully!' : 'Student added successfully!', 'success');
                         $('#addStudentModal').hide();
                         fetchStudents();
                     },
                     error: function (error) {
-                        console.error('Error saving student:', error);
-                        alert('Failed to save student.');
+                        Swal.fire('Error', 'Failed to save student.', 'error');
                     }
                 });
             });
@@ -196,34 +197,47 @@
                         $('#addCourse').val(student.course);
                         $('#addYearLevel').val(student.year_level);
                         $('#addEmail').val(student.email);
-                        $('#addPassword').val(student.password);
+                        $('#addPassword').val(''); // Don't prefill password for security
                         $('#addPhone').val(student.phone);
                         $('#addAddress').val(student.address);
-                        $('#profilePreview').hide().attr('src', '');
+                        if (student.profile_picture) {
+                            $('#profilePreview').attr('src', `http://127.0.0.1:8000/storage/${student.profile_picture}`).show();
+                        } else {
+                            $('#profilePreview').hide().attr('src', '');
+                        }
                         $('#addStudentModal').show();
                     },
                     error: function (error) {
-                        console.error('Error fetching student details:', error);
+                        Swal.fire('Error', 'Error fetching student details.', 'error');
                     }
                 });
             });
 
             $(document).on('click', '.delete-btn', function () {
                 const studentId = $(this).data('id');
-                if (confirm('Are you sure you want to delete this student?')) {
-                    $.ajax({
-                        url: `http://localhost:8000/api/students/delete/${studentId}`,
-                        method: 'DELETE',
-                        success: function () {
-                            alert('Student deleted successfully!');
-                            fetchStudents();
-                        },
-                        error: function (error) {
-                            console.error('Error deleting student:', error);
-                            alert('Failed to delete student.');
-                        }
-                    });
-                }
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This action cannot be undone!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `http://localhost:8000/api/students/delete/${studentId}`,
+                            method: 'DELETE',
+                            success: function () {
+                                Swal.fire('Deleted!', 'Student deleted successfully!', 'success');
+                                fetchStudents();
+                            },
+                            error: function (error) {
+                                Swal.fire('Error', 'Failed to delete student.', 'error');
+                            }
+                        });
+                    }
+                });
             });
         });
     </script>

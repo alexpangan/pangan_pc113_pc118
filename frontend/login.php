@@ -101,11 +101,45 @@
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
       </div>
-      <button type="submit" class="btn">Login</button>
+      <button type="submit" id="login" class="btn">Login</button>
     </form>
     <div class="form-footer">
       <p>Don't have an account? <a href="signup.php">Sign up</a></p>
     </div>
   </div>
+  <script>
+    document.getElementById('login').addEventListener('click', function (e) {
+      e.preventDefault();
+      const email = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      fetch('http://127.0.0.1:8000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      })
+    .then(res => res.json())
+    .then(data => {
+      if(data.token) {
+        localStorage.setItem('token', data.token);
+        console.log('Login successful:', data);
+        window.location.href = 'dashboard.php';
+      }else {
+        console.error('Login failed:', data);
+        alert('Login failed. Please check your credentials.');
+      }
+    })
+    .catch(error => {
+      // Handle login error
+      console.error('Error:', error);
+      alert('Login failed. Please check your credentials.');
+    });
+  })
+  </script>
 </body>
 </html>

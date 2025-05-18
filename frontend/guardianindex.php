@@ -25,7 +25,6 @@
       min-height: 100vh;
       padding: 1rem;
       color: white;
-      background: #185a9d;
       flex-shrink: 0;
       z-index: 2;
       position: relative;
@@ -80,17 +79,16 @@
   <div class="layout-flex">
     <!-- Sidebar -->
     <nav class="sidebar">
-      <?php include '../include/sidebar.php'; ?>
+      <?php include 'include/sidebar.php'; ?>
     </nav>
 
     <!-- Main Content Area -->
     <div class="main-container">
-      <?php include '../include/maincontent.php'; ?>
+      <?php include 'include/maincontent.php'; ?>
       <div class="main-content">
-        <div class="addparent mb-3">
+        <div class="mb-3 d-flex justify-content-between align-items-center">
           <button type="button" class="btn btn-primary" id="showAddModalBtn">Add Parent</button>
-          <input type="text" id="searchInput" class="form-control d-inline-block w-auto ms-3" placeholder="Search guardian..." style="width: 250px; display: inline-block;">
-          <button type="button" class="btn btn-secondary ms-1" id="searchBtn">Search</button>
+          <input type="text" id="searchInput" class="form-control w-auto " placeholder="Search guardian..." style="max-width: 250px;">
         </div>
         <table class="table">
           <thead>
@@ -304,18 +302,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Search button click
-  document.getElementById('searchBtn').addEventListener('click', function() {
-    const searchTerm = document.getElementById('searchInput').value;
-    renderTable(allGuardians, searchTerm);
-  });
+  // Search/filter function
+    $('#searchInput').on('keyup', function() {
+        const value = $(this).val().toLowerCase();
+        $('#activitiesTable tbody tr').filter(function() {
+            $(this).toggle(
+                $(this).text().toLowerCase().indexOf(value) > -1
+            );
+        });
+    });
 
-  // Optional: search as you type (press Enter)
-  document.getElementById('searchInput').addEventListener('keyup', function(e) {
-    if (e.key === 'Enter') {
-      renderTable(allGuardians, this.value);
-    }
-  });
+  
 
   // Table actions (Approve, View, Edit, Delete)
   document.querySelector('table').addEventListener('click', function(e) {

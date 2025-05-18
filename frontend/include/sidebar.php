@@ -14,14 +14,14 @@
     bottom: 0;
   ">
     <div class="text-center mb-4">
-      <img src="parentlogo.png" alt="Logo" style="width: 150px; height: auto;">
+      <img src="http://127.0.0.1:8000/storage/photos/parentlogo.png" alt="Logo" style="width: 150px; height: auto;">
     </div>
 
-    <a href="#" class="btn text-start mb-2 w-100 d-flex align-items-center text-white" style="background-color: transparent; border: none; font-size: 20px;">
+    <a href="dashboard.php" class="btn text-start mb-2 w-100 d-flex align-items-center text-white" style="background-color: transparent; border: none; font-size: 20px;">
       Dashboard
     </a>
 
-    <a href="guardian/index.php" class="btn text-start mb-2 w-100 d-flex align-items-center text-white" style="background-color: transparent; border: none; font-size: 20px;">
+    <a href="guardianindex.php" class="btn text-start mb-2 w-100 d-flex align-items-center text-white" style="background-color: transparent; border: none; font-size: 20px;">
       Parents 
     </a>
 
@@ -29,7 +29,7 @@
       Student Attendance
     </a>
 
-    <a href="schoolactivity/index.php" class="btn text-start mb-2 w-100 d-flex align-items-center text-white" style="background-color: transparent; border: none; font-size: 20px;">
+    <a href="schoolactivityindex.php" class="btn text-start mb-2 w-100 d-flex align-items-center text-white" style="background-color: transparent; border: none; font-size: 20px;">
       School Activities
     </a>
 
